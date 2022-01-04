@@ -31,19 +31,23 @@ def list_files():
 
 @app.get('/files/<extension>')
 def list_by_extension(extension):
-    return jsonify(os.listdir(f'./app/{files_directory}/{extension}')), 200
+    try:
+        return jsonify(os.listdir(f'./app/{files_directory}/{extension}')), 200
+    
+    except:
+        return 'Extension not found', 404
 
 @app.get('/download/<file_name>')
 def download(file_name):
     try:
         return send_from_directory(
-            directory=f"./{files_directory}",
+            directory=f"./{files_directory}/{file_name[-3:].lower()}",
             path=file_name,
             as_attachment=True
         )
 
     except:
-        return 'File not found', 404
+        return 'Invalid file name', 404
 
 @app.get('/download-zip/')
 def download_zip():
