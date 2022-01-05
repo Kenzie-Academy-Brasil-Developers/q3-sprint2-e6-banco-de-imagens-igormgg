@@ -2,10 +2,11 @@ import os
 from flask import request, send_from_directory
 
 allowed_extensions = os.getenv('ALLOWED_EXTENSIONS').split(',')
+files_directory = os.getenv('FILES_DIRECTORY')
 
 def create_files_directory():
     if 'files' not in os.listdir('app/kenzie'):
-        os.system('cd app/kenzie && mkdir files && cd files && mkdir gif jpg png')
+        os.system(f'cd app && mkdir {files_directory} && cd {files_directory} && mkdir gif jpg png')
 create_files_directory()
 
 def save_file(file):
