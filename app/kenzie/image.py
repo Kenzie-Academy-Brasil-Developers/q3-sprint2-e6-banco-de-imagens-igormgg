@@ -5,23 +5,23 @@ allowed_extensions = os.getenv('ALLOWED_EXTENSIONS').split(',')
 files_directory = os.getenv('FILES_DIRECTORY')
 
 def create_files_directory():
-    if 'files' not in os.listdir('app/kenzie'):
+    if files_directory not in os.listdir('app'):
         os.system(f'cd app && mkdir {files_directory} && cd {files_directory} && mkdir gif jpg png')
 create_files_directory()
 
 def save_file(file):
-    file.save(f"./app/kenzie/files/{file.filename[-3:].lower()}/{file.filename}")
+    file.save(f"./app/{files_directory}/{file.filename[-3:].lower()}/{file.filename}")
 
 def equal_file(file):
-    for gif_file in os.listdir('./app/kenzie/files/gif'):
+    for gif_file in os.listdir(f'./app/{files_directory}/gif'):
         if file in gif_file:
             return True
 
-    for jpg_file in os.listdir('./app/kenzie/files/jpg'):
+    for jpg_file in os.listdir(f'./app/{files_directory}/jpg'):
         if file in jpg_file:
             return True
 
-    for png_file in os.listdir('./app/kenzie/files/png'):
+    for png_file in os.listdir(f'./app/{files_directory}/png'):
         if file in png_file:
             return True
     
@@ -73,10 +73,10 @@ def upload_files():
 
 def zip_files(query_ext, query_compress):
     if query_ext == 'gif':
-        if len(os.listdir('app/kenzie/files/gif')) == 0:
+        if len(os.listdir(f'app/{files_directory}/gif')) == 0:
             return "File not found", 404
         
-        os.system(f'cd app/kenzie/files/gif && zip -{query_compress} -r gifFiles * && mv gifFiles.zip /tmp')
+        os.system(f'cd app/{files_directory}/gif && zip -{query_compress} -r gifFiles * && mv gifFiles.zip /tmp')
 
         return send_from_directory(
         directory="/tmp",
@@ -85,10 +85,10 @@ def zip_files(query_ext, query_compress):
         )
 
     if query_ext == 'jpg':
-        if len(os.listdir('app/kenzie/files/jpg')) == 0:
+        if len(os.listdir(f'app/{files_directory}/jpg')) == 0:
             return "File not found", 404
 
-        os.system(f'cd app/kenzie/files/jpg && zip -{query_compress} -r jpgFiles * && mv jpgFiles.zip /tmp')
+        os.system(f'cd app/{files_directory}/jpg && zip -{query_compress} -r jpgFiles * && mv jpgFiles.zip /tmp')
 
         return send_from_directory(
         directory="/tmp",
@@ -97,10 +97,10 @@ def zip_files(query_ext, query_compress):
         )
 
     if query_ext == 'png':
-        if len(os.listdir('app/kenzie/files/png')) == 0:
+        if len(os.listdir(f'app/{files_directory}/png')) == 0:
             return "File not found", 404
 
-        os.system(f'cd app/kenzie/files/png && zip -{query_compress} -r pngFiles * && mv pngFiles.zip /tmp')
+        os.system(f'cd app/{files_directory}/png && zip -{query_compress} -r pngFiles * && mv pngFiles.zip /tmp')
 
         return send_from_directory(
         directory="/tmp",
